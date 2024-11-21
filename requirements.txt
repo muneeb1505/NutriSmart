@@ -1,0 +1,7 @@
+python-dotenv
+streamlit
+sqlite3
+os
+google-generativeai
+pyttsx3
+speech_recognition
