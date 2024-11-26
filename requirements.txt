@@ -1,6 +1,0 @@
-streamlit
-python-dotenv
-sqlite3  
-google-generativeai
-pyttsx3
-SpeechRecognition
