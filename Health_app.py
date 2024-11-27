@@ -121,7 +121,6 @@ with tab1:
             st.write(response)
 
 # Tab 2: Calorie Tracker with AI - Total Calories
-# Tab 2: Calorie Tracker with AI - Total Calories
 with tab2:
     st.header("Track Calories, Stay Healthy")
 
