@@ -103,11 +103,6 @@ st.markdown(
                 font-size: 2rem;  /* Adjust font size for mobile devices */
             }
         }
-        img{
-         width: 200px;
-         height: 200px;
-         border-radius: 10px;
-        }
     </style>
     
       <div class="responsive-container">
