@@ -202,7 +202,7 @@ with tab2:
         else:
             st.error("Please upload or capture an image to analyze.")
 
-# Tab 3: Calorie Needs by Age
+# Tab 3: Calculate calorie needs
 with tab3:
     st.markdown("### Enter your details to calculate your daily calorie needs.")
 
@@ -221,7 +221,6 @@ with tab3:
         key="activity_input"
     )
 
-    # Calculate calorie needs
     if st.button("Calculate Calorie Needs"):
         if age <= 0 or height <= 0 or weight <= 0:
             st.error("Please enter valid age, height, and weight values.")
