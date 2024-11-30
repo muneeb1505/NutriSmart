@@ -100,7 +100,7 @@ st.markdown(
         }
         @media (max-width: 480px) {
             .responsive-container h1 {
-                font-size: 2.5rem;  /* Adjust font size for mobile devices */
+                font-size: 2rem;  /* Adjust font size for mobile devices */
             }
         }
         img{
