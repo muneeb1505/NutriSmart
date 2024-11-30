@@ -105,7 +105,7 @@ st.markdown(
         }
         img{
          width: 200px;
-         height: 100px;
+         height: 200px;
          border-radius: 10px;
         }
     </style>
