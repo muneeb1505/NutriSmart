@@ -4,6 +4,7 @@ import os
 import google.generativeai as genai
 from PIL import Image
 import sqlite3
+import io
 
 # Load environment variables
 load_dotenv()
@@ -117,7 +118,7 @@ st.markdown(
     'Get detailed dietary and lifestyle recommendations based on your health concerns.</p>',
     unsafe_allow_html=True,
 )
-tab1, tab2, tab3 = st.tabs(["NutriGenie", "Calorie Tracker with AI", " Calorie Calculator"])
+tab1, tab2, tab3, tab4 = st.tabs(["NutriGenie", "Calorie Tracker with AI", " Calorie Calculator", "Recipe Suggestions"])
 
 # Tab 1: Text-Based Recommendations
 with tab1:
@@ -183,12 +184,32 @@ with tab2:
                 input_prompt = """
                 You are an expert nutritionist. Analyze the image to identify the food items 
                 and calculate the total calories. Provide the result in the following format:
-
+                Calories
                 1. Item 1 - no. of calories
                 2. Item 2 - no. of calories
                 ----
+
+                Protein
+                1.Item 1 - no. of protein
+                2.Item 2 - no. of protein
+                ----
+
+                Carbs
+                1.Item 1 - no. of carbs
+                2.Item 2 - no. of carbs
+                ----
+
+                Fats
+                1.Item 1 - no. of fats
+                2.Item 2 - no. of fats
+                ----
+
                 Total Calories: XX
+                Total Protein: XX
+                Total Carbs: XX
+                Total Fats: XX
                 """
+
                 response = get_gemini_response(input_prompt, image_data)
                 st.subheader("Analysis Result:")
                 st.write(response)
@@ -197,7 +218,7 @@ with tab2:
         else:
             st.error("Please upload or capture an image to analyze.")
 
-# Tab 3: Calculate calorie needs
+# Tab 3: Calorie Needs by Age
 with tab3:
     st.markdown("### Enter your details to calculate your daily calorie needs.")
 
@@ -216,6 +237,7 @@ with tab3:
         key="activity_input"
     )
 
+    # Calculate calorie needs
     if st.button("Calculate Calorie Needs"):
         if age <= 0 or height <= 0 or weight <= 0:
             st.error("Please enter valid age, height, and weight values.")
@@ -240,3 +262,60 @@ with tab3:
 
             st.success("🎉 **Your Calorie Needs Are Calculated!**")
             st.subheader(f"Recommended Daily Calorie Intake: {int(calorie_needs)} kcal")
+
+# Tab 4: Recipe Suggestions
+with tab4:
+    st.header("Recipe Suggestions 🍳")
+    st.markdown("### Get customized recipes based on your preferences, goals, and ingredients!")
+
+    # User Inputs
+    st.subheader("1. Dietary Preferences")
+    dietary_preferences = st.selectbox(
+        "Select your dietary preference:",
+        ["No Preference", "Vegetarian", "Vegan", "Non-vegetarians", "Keto", "Gluten-Free", "Low-Carb", "High-Protein", "Mediterranean"
+        "Raw Food", "Low-Fat", "Dairy-Free"]
+    )
+
+    st.subheader("2. Health Goals")
+    health_goal = st.selectbox(
+        "Select your health goal:",
+        ["No Specific Goal", "Weight Loss", "Muscle Gain", "Managing Diabetes", "Boosting Immunity", "Heart Health", "Improving Gut Health", "Blood Pressure", "Better Skin and Hair",
+        "Improving Mental Health", "Pregnancy Diet", "Healthy Aging", "Managing Thyroid", "Improving Stamina"]
+    )
+
+    st.subheader("3. Ingredients Available at Home")
+    ingredients = st.text_area(
+        "Enter the ingredients you have (comma-separated):",
+        placeholder="e.g., chicken, tomatoes, garlic, onions",
+        key="ingredients_input"
+    )
+
+    # Suggest Recipes Button
+    if st.button("🍽️ Suggest Recipes"):
+        if ingredients.strip() == "":
+            st.error("Please enter at least one ingredient.")
+        else:
+            # Generate a prompt for recipe suggestions
+            recipe_prompt = f"""
+            You are a master chef and nutritionist. Based on the following inputs:
+            - Dietary Preference: {dietary_preferences}
+            - Health Goal: {health_goal}
+            - Ingredients: {ingredients}
+
+            Suggest 3 healthy and delicious recipes. For each recipe, include:
+            1. Recipe name
+            2. Brief description
+            3. Ingredients list
+            4. Step-by-step cooking instructions
+            5. Nutritional information (calories, protein, carbs, fats)
+            """
+
+            # Fetch recipe suggestions using Gemini API
+            recipe_response = get_gemini_response(recipe_prompt)
+
+            # Display the Response
+            st.success("🎉 *Your Recipe Suggestions Are Ready!*")
+            if recipe_response:
+                st.write(recipe_response)
+            else:
+                st.error("Unable to fetch recipes. Please try again.")
