@@ -1,1 +1,1 @@
-# NutriGenie
+# NutriSmart
